@@ -92,8 +92,6 @@
                         </div>
                     </div>
                     <div class="d-flex flex-column align-items-start align-items-lg-end gap-2">
-                        <a href="/clase/<%= clase.id %>/tareas" class="btn btn-light btn-sm rounded-pill px-4">Ver tareas</a>
-                        <a href="/clase/<%= clase.id %>/personas" class="btn btn-outline-light btn-sm rounded-pill px-4">Personas</a>
                     </div>
                 </div>
             </div>
@@ -101,14 +99,9 @@
 
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
             <div class="btn-group" role="group" aria-label="Secciones de clase">
-                <button id="tabTasksBtn" type="button" class="btn btn-outline-light active" onclick="switchSection('tasks')">Tareas</button>
-                <button id="tabPersonasBtn" type="button" class="btn btn-outline-light" onclick="switchSection('personas')">Personas</button>
-                <button id="tabRendimientoBtn" type="button" class="btn btn-outline-light" onclick="switchSection('rendimiento')">Rendimiento</button>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchSection('tasks')">Ver tareas</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchSection('personas')">Ver personas</button>
-                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchSection('rendimiento')">Ver rendimiento</button>
+                <button id="tabTasksBtn" type="button" class="btn btn-outline-secondary active" onclick="switchSection('tasks')">Tareas</button>
+                <button id="tabPersonasBtn" type="button" class="btn btn-outline-secondary" onclick="switchSection('personas')">Personas</button>
+                <button id="tabRendimientoBtn" type="button" class="btn btn-outline-secondary" onclick="switchSection('rendimiento')">Rendimiento</button>
             </div>
         </div>
 
@@ -120,12 +113,12 @@
                 <button class="btn btn-outline-primary btn-sm rounded-pill px-4" type="button" data-bs-toggle="collapse" data-bs-target="#announcementForm">
                     <i class="fa-solid fa-bullhorn me-2"></i> Crear anuncio
                 </button>
-                <a href="/clase/<%= clase.id %>/rendimiento" class="btn btn-outline-light btn-sm rounded-pill px-4">
-                    <i class="fa-solid fa-chart-line me-2"></i> Rendimiento de Clase
-                </a>
-                <a href="/clase/<%= clase.id %>/personas" class="btn btn-outline-light btn-sm rounded-pill px-4">
+                <button class="btn btn-outline-secondary btn-sm rounded-pill px-4" onclick="switchSection('personas')">
                     <i class="fa-solid fa-users me-2"></i> Ver personas
-                </a>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm rounded-pill px-4" onclick="switchSection('rendimiento')">
+                    <i class="fa-solid fa-chart-line me-2"></i> Rendimiento de Clase
+                </button>
             </div>
             <div class="collapse mb-4" id="announcementForm">
                 <div class="card card-body bg-white shadow-sm">
@@ -214,12 +207,6 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
-                    <h3 class="h6 fw-bold mb-3">Acciones rápidas</h3>
-                    <button type="button" class="btn btn-primary w-100 rounded-pill mb-3" onclick="switchSection('tasks')">Ver todas las tareas</button>
-                    <button type="button" class="btn btn-outline-secondary w-100 rounded-pill mb-3" onclick="switchSection('personas')">Ver personas</button>
-                    <button type="button" class="btn btn-outline-secondary w-100 rounded-pill" onclick="switchSection('rendimiento')">Ver rendimiento</button>
-                </div>
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-body">
                         <h3 class="h6 fw-bold mb-3">Anuncios recientes</h3>

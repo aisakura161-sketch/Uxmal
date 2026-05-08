@@ -99,6 +99,19 @@
             </div>
         </div>
 
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
+            <div class="btn-group" role="group" aria-label="Secciones de clase">
+                <button id="tabTasksBtn" type="button" class="btn btn-outline-light active" onclick="switchSection('tasks')">Tareas</button>
+                <button id="tabPersonasBtn" type="button" class="btn btn-outline-light" onclick="switchSection('personas')">Personas</button>
+                <button id="tabRendimientoBtn" type="button" class="btn btn-outline-light" onclick="switchSection('rendimiento')">Rendimiento</button>
+            </div>
+            <div class="d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchSection('tasks')">Ver tareas</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchSection('personas')">Ver personas</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" onclick="switchSection('rendimiento')">Ver rendimiento</button>
+            </div>
+        </div>
+
         <% if (isProfesor) { %>
             <div class="d-flex flex-wrap gap-2 mb-4">
                 <button class="btn btn-primary btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createAssignmentModal">
@@ -128,9 +141,10 @@
             </div>
         <% } %>
 
-        <div class="row gx-4">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div id="sectionTasks">
+            <div class="row gx-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between mb-4 gap-3">
                             <div>
@@ -200,15 +214,21 @@
                 </div>
             </div>
             <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h3 class="h6 fw-bold mb-3">Acciones rápidas</h3>
+                    <button type="button" class="btn btn-primary w-100 rounded-pill mb-3" onclick="switchSection('tasks')">Ver todas las tareas</button>
+                    <button type="button" class="btn btn-outline-secondary w-100 rounded-pill mb-3" onclick="switchSection('personas')">Ver personas</button>
+                    <button type="button" class="btn btn-outline-secondary w-100 rounded-pill" onclick="switchSection('rendimiento')">Ver rendimiento</button>
+                </div>
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-body">
                         <h3 class="h6 fw-bold mb-3">Anuncios recientes</h3>
-                        <% const announcementPosts = posts.filter(post => post.tipo !== 'tarea'); %>
-                        <% if (!announcementPosts || announcementPosts.length === 0) { %>
+                        <% var announcementPostsTasks = posts.filter(post => post.tipo !== 'tarea'); %>
+                        <% if (!announcementPostsTasks || announcementPostsTasks.length === 0) { %>
                             <div class="text-muted">No hay anuncios recientes.</div>
                         <% } else { %>
                             <div class="list-group list-group-flush">
-                                <% announcementPosts.forEach(post => { %>
+                                <% announcementPostsTasks.forEach(post => { %>
                                     <div class="list-group-item border-0 px-0 py-3">
                                         <div class="d-flex align-items-start gap-3 mb-2">
                                             <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
@@ -227,10 +247,287 @@
                         <% } %>
                     </div>
                 </div>
-                <div class="card border-0 shadow-sm rounded-4 p-4">
-                    <h3 class="h6 fw-bold mb-3">Acciones rápidas</h3>
-                    <a href="/clase/<%= clase.id %>/tareas" class="btn btn-primary w-100 rounded-pill mb-3">Ver todas las tareas</a>
-                    <a href="/clase/<%= clase.id %>/personas" class="btn btn-outline-secondary w-100 rounded-pill">Ver personas</a>
+            </div>
+        </div>
+
+        <div id="sectionPersonas" class="d-none">
+            <div class="row gx-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-4 gap-3">
+                                <div>
+                                    <h2 class="h5 fw-bold mb-1">Personas</h2>
+                                    <p class="mb-0 text-muted">Profesores y estudiantes inscritos en esta clase.</p>
+                                </div>
+                                <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3"><%= (profesores.length || 0) + (alumnos.length || 0) %> inscritos</span>
+                            </div>
+
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center border-bottom border-primary border-2 mb-3 pb-2">
+                                    <h3 class="text-primary mb-0">Profesores</h3>
+                                </div>
+                                <% if (profesores && profesores.length > 0) { %>
+                                    <div class="list-group list-group-flush">
+                                        <% profesores.forEach(p => { %>
+                                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-center gap-3">
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    <%= p.usuarios.nombre.charAt(0) %><%= p.usuarios.apellido.charAt(0) %>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold"><%= p.usuarios.nombre %> <%= p.usuarios.apellido %></div>
+                                                    <small class="text-muted">Profesor</small>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                <% } else { %>
+                                    <p class="text-muted">No hay profesores asignados.</p>
+                                <% } %>
+                            </div>
+
+                            <div>
+                                <div class="d-flex align-items-center border-bottom border-primary border-2 mb-3 pb-2">
+                                    <h3 class="text-primary mb-0">Alumnos</h3>
+                                    <span class="text-muted small ms-3"><%= alumnos.length || 0 %> alumnos</span>
+                                </div>
+                                <% if (alumnos && alumnos.length > 0) { %>
+                                    <div class="list-group list-group-flush">
+                                        <% alumnos.forEach(a => { %>
+                                            <div class="list-group-item border-0 px-0 py-3 d-flex align-items-center gap-3">
+                                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                    <%= a.usuarios.nombre.charAt(0) %><%= a.usuarios.apellido.charAt(0) %>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <div class="fw-semibold"><%= a.usuarios.nombre %> <%= a.usuarios.apellido %></div>
+                                                </div>
+                                                <div>
+                                                    <% if (isProfesor) { %>
+                                                        <button class="btn btn-sm btn-outline-danger" onclick="removeStudent('<%= clase.id %>', '<%= a.usuarios.id %>', '<%= a.usuarios.nombre %> <%= a.usuarios.apellido %>')">Dar de baja</button>
+                                                    <% } else { %>
+                                                        <span class="badge bg-secondary bg-opacity-10 text-secondary">Estudiante</span>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                <% } else { %>
+                                    <div class="text-center py-5">
+                                        <p class="text-muted mb-0">No hay alumnos inscritos en esta clase.</p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body">
+                            <h3 class="h6 fw-bold mb-3">Anuncios recientes</h3>
+                            <% var announcementPostsPersonas = posts.filter(post => post.tipo !== 'tarea'); %>
+                            <% if (!announcementPostsPersonas || announcementPostsPersonas.length === 0) { %>
+                                <div class="text-muted">No hay anuncios recientes.</div>
+                            <% } else { %>
+                                <div class="list-group list-group-flush">
+                                    <% announcementPostsPersonas.forEach(post => { %>
+                                        <div class="list-group-item border-0 px-0 py-3">
+                                            <div class="d-flex align-items-start gap-3 mb-2">
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                    <i class="fa-solid fa-bullhorn"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold"><%= post.autor ? (post.autor.nombre + ' ' + (post.autor.apellido || '')) : 'MaxGrade' %></div>
+                                                    <small class="text-muted"><%= post.fecha_orden ? new Date(post.fecha_orden).toLocaleDateString() : '' %></small>
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 fw-semibold"><%= post.titulo || 'Anuncio' %></div>
+                                            <p class="small text-muted mb-0"><%= post.descripcion || post.contenido || '' %></p>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="sectionRendimiento" class="d-none">
+            <div class="row gx-4">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center justify-content-between mb-4 gap-3">
+                                <div>
+                                    <h2 class="h5 fw-bold mb-1">Rendimiento de clase</h2>
+                                    <p class="mb-0 text-muted">Métricas de entrega y calificación.</p>
+                                </div>
+                                <% if (classPerformance) { %>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3"><%= classPerformance.totalEstudiantes %> alumnos</span>
+                                <% } %>
+                            </div>
+
+                            <% if (isProfesor && classPerformance) { %>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-3">
+                                        <div class="card border-0 shadow-sm h-100">
+                                            <div class="card-body">
+                                                <p class="text-muted small mb-1">Promedio</p>
+                                                <h3 class="mb-0 fw-bold"><%= classPerformance.promedioCalificacion %></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card border-0 shadow-sm h-100">
+                                            <div class="card-body">
+                                                <p class="text-muted small mb-1">Entregas</p>
+                                                <h3 class="mb-0 fw-bold"><%= classPerformance.totalEntregas %></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card border-0 shadow-sm h-100">
+                                            <div class="card-body">
+                                                <p class="text-muted small mb-1">No entregadas</p>
+                                                <h3 class="mb-0 fw-bold"><%= classPerformance.noEntregadas %></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card border-0 shadow-sm h-100">
+                                            <div class="card-body">
+                                                <p class="text-muted small mb-1">% Entrega</p>
+                                                <h3 class="mb-0 fw-bold"><%= classPerformance.porcentajeEntrega %>%</h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="studentSelector" class="form-label fw-bold">Seleccionar alumno</label>
+                                    <select id="studentSelector" class="form-select" onchange="actualizarRendimientoIndividual()">
+                                        <option value="">-- Selecciona un alumno --</option>
+                                        <% (studentsList || []).forEach(student => { %>
+                                            <option value="<%= student.id %>"><%= student.nombre %> <%= student.apellido %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div id="studentPerformanceSection" class="d-none">
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-3">
+                                            <div class="card border-0 shadow-sm h-100">
+                                                <div class="card-body">
+                                                    <p class="text-muted small mb-1">Promedio</p>
+                                                    <h3 class="mb-0 fw-bold" id="studentAverage">0.00</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card border-0 shadow-sm h-100">
+                                                <div class="card-body">
+                                                    <p class="text-muted small mb-1">Entregadas</p>
+                                                    <h3 class="mb-0 fw-bold" id="studentDelivered">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card border-0 shadow-sm h-100">
+                                                <div class="card-body">
+                                                    <p class="text-muted small mb-1">% Entrega</p>
+                                                    <h3 class="mb-0 fw-bold" id="studentDeliveryPercent">0%</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card border-0 shadow-sm h-100">
+                                                <div class="card-body">
+                                                    <p class="text-muted small mb-1">Calificadas</p>
+                                                    <h3 class="mb-0 fw-bold" id="studentGraded">0</h3>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body">
+                                                    <p class="small text-muted mb-2">A tiempo</p>
+                                                    <h4 class="fw-bold" id="studentOnTime">0</h4>
+                                                    <div class="progress" style="height: 8px;">
+                                                        <div class="progress-bar bg-success" id="studentOnTimeBar" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body">
+                                                    <p class="small text-muted mb-2">Tarde</p>
+                                                    <h4 class="fw-bold" id="studentLate">0</h4>
+                                                    <div class="progress" style="height: 8px;">
+                                                        <div class="progress-bar bg-warning" id="studentLateBar" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body">
+                                                    <p class="small text-muted mb-2">No entregadas</p>
+                                                    <h4 class="fw-bold" id="studentNotDelivered">0</h4>
+                                                    <div class="progress" style="height: 8px;">
+                                                        <div class="progress-bar bg-danger" id="studentNotDeliveredBar" style="width: 0%"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body">
+                                                    <p class="small text-muted mb-2">Calificadas</p>
+                                                    <h4 class="fw-bold" id="studentTotalGraded">0</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } else { %>
+                                <div class="alert alert-info" role="alert">
+                                    <i class="fa-solid fa-circle-info"></i> El rendimiento de clase solo está disponible para profesores.
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm rounded-4 mb-4">
+                        <div class="card-body">
+                            <h3 class="h6 fw-bold mb-3">Anuncios recientes</h3>
+                            <% var announcementPostsRendimiento = posts.filter(post => post.tipo !== 'tarea'); %>
+                            <% if (!announcementPostsRendimiento || announcementPostsRendimiento.length === 0) { %>
+                                <div class="text-muted">No hay anuncios recientes.</div>
+                            <% } else { %>
+                                <div class="list-group list-group-flush">
+                                    <% announcementPostsRendimiento.forEach(post => { %>
+                                        <div class="list-group-item border-0 px-0 py-3">
+                                            <div class="d-flex align-items-start gap-3 mb-2">
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                    <i class="fa-solid fa-bullhorn"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-semibold"><%= post.autor ? (post.autor.nombre + ' ' + (post.autor.apellido || '')) : 'MaxGrade' %></div>
+                                                    <small class="text-muted"><%= post.fecha_orden ? new Date(post.fecha_orden).toLocaleDateString() : '' %></small>
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 fw-semibold"><%= post.titulo || 'Anuncio' %></div>
+                                            <p class="small text-muted mb-0"><%= post.descripcion || post.contenido || '' %></p>
+                                        </div>
+                                    <% }) %>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -239,6 +536,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/public/js/swal-utils.js"></script>
+    <script type="application/json" id="studentPerformanceData"><%- studentPerformanceMapJson || '{}' %></script>
     <script src="/public/js/dashboard.js"></script>
     <script src="/public/js/clase.js"></script>
     <script src="/public/js/tareas.js"></script>

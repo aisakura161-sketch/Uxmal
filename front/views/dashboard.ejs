@@ -12,9 +12,9 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
         <div class="container-fluid px-0">
-            <div class="d-flex align-items-center justify-content-between w-100">
+            <div class="navbar-inner d-flex align-items-center position-relative w-100">
                 <button class="btn btn-light border-0 text-dark" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
-                <div class="d-flex align-items-center gap-3 justify-content-end">
+                <div class="navbar-actions d-flex align-items-center gap-3 ms-auto">
                     <a href="#" class="nav-action text-dark small d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#joinModal">
                         <i class="fa-solid fa-link"></i>
                         <span>© Unirse a una clase</span>
@@ -44,16 +44,12 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="logo-mark" aria-hidden="true">
-                <span class="logo-block logo-block-1"></span>
-                <span class="logo-block logo-block-2"></span>
-                <span class="logo-block logo-block-3"></span>
-            </div>
-            <div>
-                <div class="brand-title">MAXGRADE</div>
-            </div>
+            <a href="#" class="d-flex align-items-center gap-2 text-decoration-none">
+                <img src="/public/img/maxgradeplacapng.png" alt="Logo MaxGrade" class="sidebar-logo">
+            </a>
         </div>
         <ul class="sidebar-menu">
+            <li>Realiza click para ir a donde desees:</li>
             <li><a href="#" data-section="classes" class="sidebar-link active"><i class="fa-solid fa-graduation-cap me-3"></i>Mis clases</a></li>
             <li><a href="#" data-section="calendar" class="sidebar-link"><i class="fa-solid fa-clipboard-list me-3"></i>Tareas</a></li>
             <li><a href="#" data-section="submissions" class="sidebar-link"><i class="fa-solid fa-clipboard-check me-3"></i>Entregadas</a></li>

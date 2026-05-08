@@ -5,6 +5,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const overlay = document.getElementById('sidebarOverlay');
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
 
+    function refreshSidebarToggle() {
+        if (!sidebarToggle) return;
+        if (window.innerWidth >= 992) {
+            sidebarToggle.style.display = 'none';
+            return;
+        }
+        sidebarToggle.style.display = sidebar.classList.contains('show') ? 'none' : 'inline-flex';
+    }
+
     document.querySelectorAll('.class-banner').forEach(card => {
         const bg = card.dataset.bg || '';
         if (bg) {
@@ -12,10 +21,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    refreshSidebarToggle();
+    window.addEventListener('resize', refreshSidebarToggle);
+
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('show');
             overlay.classList.toggle('show');
+            refreshSidebarToggle();
         });
     }
 
@@ -23,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.addEventListener('click', function() {
             sidebar.classList.remove('show');
             overlay.classList.remove('show');
+            refreshSidebarToggle();
         });
     }
 
@@ -43,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (window.innerWidth < 992) {
                 sidebar.classList.remove('show');
                 overlay.classList.remove('show');
+                refreshSidebarToggle();
             }
 
             if (section === 'calendar') {

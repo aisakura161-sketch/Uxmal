@@ -18,12 +18,45 @@ body {
     background-color: var(--page-bg) !important;
     color: var(--dashboard-text);
     font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow-x: auto;
 }
 
 .navbar {
     background: var(--panel-bg);
     border-color: var(--dashboard-border);
     min-height: 72px;
+}
+
+.navbar-inner {
+    position: relative;
+    width: 100%;
+}
+
+#sidebarToggle {
+    position: absolute;
+    left: 18px;
+    display: none;
+    z-index: 1050;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+@media (max-width: 991.98px) {
+    #sidebarToggle {
+        display: inline-flex;
+    }
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.nav-action {
+    white-space: nowrap;
 }
 
 .navbar .nav-action {

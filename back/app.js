@@ -120,6 +120,16 @@ app.get('/clase/:id', authenticateToken, async (req, res) => {
             throw postsError;
         }
 
+        const { data: unidades, error: unidadesError } = await supabase
+            .from('unidades')
+            .select('*')
+            .eq('clase_id', claseId)
+            .order('numero_unidad', { ascending: true });
+        if (unidadesError) {
+            console.error('Error loading units:', unidadesError);
+            throw unidadesError;
+        }
+
         const { data: rolData, error: rolError } = await supabase
             .from('inscripciones')
             .select('rol_en_clase')
@@ -136,7 +146,7 @@ app.get('/clase/:id', authenticateToken, async (req, res) => {
 
         console.log('Rendering class page for user:', user.id, 'isProfesor:', isProfesor);
 
-        res.render('clase', { clase, posts: posts || [], user, isProfesor });
+        res.render('clase', { clase, posts: posts || [], unidades: unidades || [], user, isProfesor });
     } catch (error) {
         console.error("Error al cargar la clase:", error);
         res.status(500).send("Error al cargar la clase");

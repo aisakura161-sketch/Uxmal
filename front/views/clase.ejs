@@ -67,10 +67,17 @@
     </aside>
 
     <main class="main-content container py-4">
-        <div class="page-header-card position-relative overflow-hidden mb-4" style="background: linear-gradient(135deg, #3ee67a 0%, #1a9b4a 100%);">
-            <% if (clase.portada_url) { %>
-                <div style="background-image: url('<%= clase.portada_url %>'); background-size: cover; background-position: center; opacity: 0.16; position: absolute; inset: 0;"></div>
-            <% } %>
+        <% if (clase.portada_url) { %>
+            <style>
+                .page-header-card.custom-bg {
+                    background-image: url('<%= clase.portada_url %>');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+            </style>
+        <% } %>
+        <div class="page-header-card position-relative overflow-hidden mb-4<% if (clase.portada_url) { %> custom-bg<% } %>" style="background-color: #1a73e8;">
             <div class="position-relative p-4 p-lg-5 text-white">
                 <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3">
                     <div>
@@ -92,6 +99,35 @@
             </div>
         </div>
 
+        <% if (isProfesor) { %>
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <button class="btn btn-primary btn-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#createAssignmentModal">
+                    <i class="fa-solid fa-plus me-2"></i> Crear tarea
+                </button>
+                <button class="btn btn-outline-primary btn-sm rounded-pill px-4" type="button" data-bs-toggle="collapse" data-bs-target="#announcementForm">
+                    <i class="fa-solid fa-bullhorn me-2"></i> Crear anuncio
+                </button>
+                <a href="/clase/<%= clase.id %>/rendimiento" class="btn btn-outline-light btn-sm rounded-pill px-4">
+                    <i class="fa-solid fa-chart-line me-2"></i> Rendimiento de Clase
+                </a>
+                <a href="/clase/<%= clase.id %>/personas" class="btn btn-outline-light btn-sm rounded-pill px-4">
+                    <i class="fa-solid fa-users me-2"></i> Ver personas
+                </a>
+            </div>
+            <div class="collapse mb-4" id="announcementForm">
+                <div class="card card-body bg-white shadow-sm">
+                    <div class="mb-3">
+                        <h6 class="fw-bold mb-2">Crear anuncio</h6>
+                        <textarea id="postContent" class="form-control mb-3" rows="3" placeholder="Escribe tu anuncio aquí..."></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary btn-sm" data-bs-toggle="collapse" data-bs-target="#announcementForm">Cancelar</button>
+                        <button class="btn btn-primary btn-sm" onclick="createPost('<%= clase.id %>')">Publicar anuncio</button>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
         <div class="row gx-4">
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
@@ -102,25 +138,63 @@
                                 <p class="mb-0 text-muted">Haz clic sobre cualquier tarea para abrirla.</p>
                             </div>
                             <% const tareaPosts = posts.filter(post => post.tipo === 'tarea'); %>
-                            <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3"><%= tareaPosts.length %> pendientes</span>
+                            <% const unidadesMap = {}; (unidades || []).forEach(unit => { unidadesMap[unit.id] = unit; }); %>
+                            <% const tareasPorUnidad = {}; const unidadOrder = []; (unidades || []).forEach(unit => { tareasPorUnidad[unit.id] = { unidad: unit, tareas: [] }; unidadOrder.push(unit.id); }); %>
+                            <% const tareassSinUnidad = []; tareaPosts.forEach(post => { if (post.unidad_id && tareasPorUnidad[post.unidad_id]) { tareasPorUnidad[post.unidad_id].tareas.push(post); } else { tareassSinUnidad.push(post); } }); %>
+                            <% if (!isProfesor) { %>
+                                <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3"><%= tareaPosts.length %> pendientes</span>
+                            <% } %>
                         </div>
-                        <% if (!tareaPosts || tareaPosts.length === 0) { %>
+                        <% if (tareaPosts.length === 0) { %>
                             <div class="text-center py-5">
                                 <i class="fa-solid fa-clipboard-list fa-3x text-muted opacity-25 mb-3"></i>
                                 <p class="text-muted mb-0">No hay tareas activas por el momento.</p>
                             </div>
                         <% } else { %>
-                            <div class="d-grid gap-3">
-                                <% tareaPosts.forEach(post => { %>
-                                    <a href="/tarea/<%= post.id %>" class="task-button d-flex align-items-center justify-content-between text-decoration-none">
+                            <% unidadOrder.forEach(unitId => { const grupo = tareasPorUnidad[unitId]; if (grupo.tareas.length > 0) { %>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fa-solid fa-folder text-primary me-2" style="font-size: 1.5rem;"></i>
                                         <div>
-                                            <div class="fw-bold text-dark mb-1"><%= post.titulo || 'Tarea sin título' %></div>
-                                            <p class="mb-0 text-muted"><%= post.descripcion || 'Revisa los detalles de la tarea aquí.' %></p>
+                                            <h5 class="mb-0 fw-bold">Unidad <%= grupo.unidad.numero_unidad %>: <%= grupo.unidad.nombre %></h5>
+                                            <% if (grupo.unidad.descripcion) { %>
+                                                <small class="text-muted"><%= grupo.unidad.descripcion %></small>
+                                            <% } %>
                                         </div>
-                                        <span class="btn btn-sm btn-primary rounded-pill">Ir</span>
-                                    </a>
-                                <% }) %>
-                            </div>
+                                    </div>
+                                    <div class="ps-4">
+                                        <% grupo.tareas.forEach(post => { %>
+                                            <a href="/tarea/<%= post.id %>" class="task-button d-flex align-items-center justify-content-between text-decoration-none">
+                                                <div>
+                                                    <div class="fw-bold text-dark mb-1"><%= post.titulo || 'Tarea sin título' %></div>
+                                                    <p class="mb-0 text-muted"><%= post.descripcion || 'Revisa los detalles de la tarea aquí.' %></p>
+                                                </div>
+                                                <span class="btn btn-sm btn-primary rounded-pill">Ir</span>
+                                            </a>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            <% } }); %>
+
+                            <% if (tareassSinUnidad.length > 0) { %>
+                                <div class="mb-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <i class="fa-solid fa-inbox text-secondary me-2" style="font-size: 1.5rem;"></i>
+                                        <h5 class="mb-0 fw-bold">Sin asignar a una unidad</h5>
+                                    </div>
+                                    <div class="ps-4">
+                                        <% tareassSinUnidad.forEach(post => { %>
+                                            <a href="/tarea/<%= post.id %>" class="task-button d-flex align-items-center justify-content-between text-decoration-none">
+                                                <div>
+                                                    <div class="fw-bold text-dark mb-1"><%= post.titulo || 'Tarea sin título' %></div>
+                                                    <p class="mb-0 text-muted"><%= post.descripcion || 'Revisa los detalles de la tarea aquí.' %></p>
+                                                </div>
+                                                <span class="btn btn-sm btn-primary rounded-pill">Ir</span>
+                                            </a>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            <% } %>
                         <% } %>
                     </div>
                 </div>
@@ -167,6 +241,8 @@
     <script src="/public/js/swal-utils.js"></script>
     <script src="/public/js/dashboard.js"></script>
     <script src="/public/js/clase.js"></script>
+    <script src="/public/js/tareas.js"></script>
+    <%- include('modals/assigmentModal') %>
     <%- include('modals/classModals') %>
 </body>
 </html>

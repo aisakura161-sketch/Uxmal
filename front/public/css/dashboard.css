@@ -129,7 +129,7 @@ body {
 }
 
 .sidebar-logo {
-    margin-right: 1rem;
+    margin-right: 1rem !important;
 }
 
 .logo-mark {
@@ -491,16 +491,31 @@ body {
 }
 
 #classContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
     justify-content: center;
+    margin-left: calc(-0.75rem);
+    margin-right: calc(-0.75rem);
 }
 
-#classContainer .col-md-4,
-#classContainer .col-lg-3 {
-    flex: none;
-    max-width: 100%;
+#classContainer > .col-md-4 {
+    flex: 1 1 calc(25% - 1.5rem);
+    max-width: calc(25% - 1.5rem);
+    min-width: 240px;
+    box-sizing: border-box;
+}
+
+#classContainer > .col-lg-3 {
+    flex: 1 1 calc(25% - 1.5rem);
+    max-width: calc(25% - 1.5rem);
+    min-width: 240px;
+    box-sizing: border-box;
+}
+
+#classContainer > .col-md-4 > .card,
+#classContainer > .col-lg-3 > .card {
+    width: 100%;
 }
 
 .dashboard-option-card:hover {

@@ -59,6 +59,11 @@ body {
     white-space: nowrap;
 }
 
+.action-label {
+    font-size: 0.8rem;
+    color: var(--dashboard-muted);
+}
+
 .navbar .nav-action {
     text-decoration: none;
     color: var(--dashboard-text);
@@ -121,6 +126,10 @@ body {
     align-items: center;
     gap: 16px;
     margin-bottom: 36px;
+}
+
+.sidebar-logo {
+    margin-right: 1rem;
 }
 
 .logo-mark {
@@ -242,11 +251,19 @@ body {
     padding-right: 16px;
 }
 
+.main-content.container {
+    max-width: calc(100vw - 320px);
+}
+
 @media (min-width: 992px) {
     .main-content {
         margin-left: 280px;
         padding-left: 36px;
         padding-right: 36px;
+    }
+
+    .main-content.container {
+        max-width: calc(100vw - 360px);
     }
 
     .sidebar {
@@ -471,6 +488,19 @@ body {
     color: inherit;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+}
+
+#classContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+#classContainer .col-md-4,
+#classContainer .col-lg-3 {
+    flex: none;
+    max-width: 100%;
 }
 
 .dashboard-option-card:hover {

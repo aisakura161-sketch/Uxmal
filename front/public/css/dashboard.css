@@ -436,6 +436,14 @@ body {
     overflow: hidden;
 }
 
+.class-card .card-title {
+    font-size: 1.35rem;
+}
+
+.class-card .card-text {
+    font-size: 0.95rem;
+}
+
 .calendar-container {
     max-width: 100%;
 }

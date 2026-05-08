@@ -5,6 +5,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const overlay = document.getElementById('sidebarOverlay');
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
 
+    document.querySelectorAll('.class-banner').forEach(card => {
+        const bg = card.dataset.bg || '';
+        if (bg) {
+            card.style.backgroundImage = `url("${bg}")`;
+        }
+    });
+
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('show');

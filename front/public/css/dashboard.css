@@ -103,7 +103,7 @@ body {
     width: 280px;
     background: var(--panel-bg);
     border-right: 1px solid var(--dashboard-border);
-    padding: 32px 24px 28px;
+    padding: 32px 24px 110px;
     box-sizing: border-box;
     overflow-y: auto;
     overflow-x: hidden;
@@ -203,10 +203,11 @@ body {
 }
 
 .sidebar-footer {
-    position: absolute;
-    left: 24px;
+    position: sticky;
     bottom: 28px;
-    width: calc(100% - 48px);
+    left: 0;
+    width: 100%;
+    display: block;
 }
 
 .video-action {

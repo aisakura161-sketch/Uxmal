@@ -524,6 +524,16 @@ body {
     flex-wrap: wrap;
 }
 
+.btn-group .btn-outline-secondary.active {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+
+.btn-group .btn-outline-secondary:not(.active):hover {
+    background-color: rgba(108, 117, 125, 0.1);
+}
+
 .dashboard-option-card {
     display: block;
     width: 100%;

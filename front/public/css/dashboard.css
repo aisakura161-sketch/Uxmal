@@ -203,24 +203,25 @@ body {
 }
 
 .sidebar-footer {
-    position: sticky;
-    bottom: 28px;
-    left: 0;
+    position: static;
     width: 100%;
     display: block;
+    margin-top: 24px;
 }
 
 .video-action {
+    display: block;
     width: 100%;
-    height: 56px;
+    min-height: 56px;
+    padding: 0 18px;
     border: none;
-    border-radius: 18px;
+    border-radius: 16px;
     background: var(--button-bg);
     color: var(--dashboard-text);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    text-align: left;
+    font-weight: 600;
     font-size: 1rem;
+    line-height: 56px;
     transition: transform 0.2s ease, background 0.2s ease;
 }
 

@@ -141,7 +141,7 @@
                                                 <i class="fa-solid fa-bullhorn"></i>
                                             </div>
                                             <div>
-                                                <div class="fw-semibold"><%= post.autor ? ${post.autor.nombre}  : 'MaxGrade' %></div>
+                                                <div class="fw-semibold"><%= post.autor ? (post.autor.nombre + ' ' + (post.autor.apellido || '')) : 'MaxGrade' %></div>
                                                 <small class="text-muted"><%= post.fecha_orden ? new Date(post.fecha_orden).toLocaleDateString() : '' %></small>
                                             </div>
                                         </div>

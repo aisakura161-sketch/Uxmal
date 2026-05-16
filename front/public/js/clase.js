@@ -38,6 +38,10 @@ function switchSection(section) {
         }
     });
 
+    if (section === 'tasks') {
+        showTaskView('overview');
+    }
+
     const buttons = {
         tasks: 'tabTasksBtn',
         personas: 'tabPersonasBtn',
@@ -50,6 +54,118 @@ function switchSection(section) {
             btn.classList.toggle('active', name === section);
         }
     });
+}
+
+function showTaskView(view) {
+    const overview = document.getElementById('tasksOverview');
+    const detail = document.getElementById('taskDetailSection');
+    const review = document.getElementById('taskReviewSection');
+
+    if (!overview || !detail || !review) return;
+
+    overview.classList.toggle('d-none', view !== 'overview');
+    detail.classList.toggle('d-none', view !== 'detail');
+    review.classList.toggle('d-none', view !== 'review');
+}
+
+async function loadSectionHtml(url, sectionId, adjustDom) {
+    const container = document.getElementById(sectionId);
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    `;
+
+    try {
+        const response = await fetch(url, { credentials: 'include' });
+        if (!response.ok) throw new Error('Error al cargar');
+
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const main = doc.querySelector('main');
+        if (!main) throw new Error('Contenido no disponible');
+
+        if (adjustDom) adjustDom(main, sectionId);
+
+        const topActions = sectionId === 'taskReviewSection'
+            ? `
+                <div class="mb-3 d-flex gap-2 flex-wrap">
+                    <button class="btn btn-light btn-sm" onclick="backToTasks()">← Volver a tareas</button>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="backToTaskDetail()">Volver a detalles</button>
+                </div>
+              `
+            : `
+                <div class="mb-3">
+                    <button class="btn btn-light btn-sm" onclick="backToTasks()">← Volver a tareas</button>
+                </div>
+              `;
+
+        container.innerHTML = `${topActions}${main.innerHTML}`;
+    } catch (error) {
+        container.innerHTML = `
+            <div class="alert alert-danger">No se pudo cargar el contenido. Intenta de nuevo.</div>
+        `;
+    }
+}
+
+function openTaskDetail(taskId, event) {
+    if (event) event.preventDefault();
+    window.currentTaskId = taskId;
+    showTaskView('detail');
+
+    loadSectionHtml(`/tarea/${taskId}`, 'taskDetailSection', (main) => {
+        const backLink = main.querySelector('nav a[href*="/clase/"]');
+        if (backLink) {
+            backLink.removeAttribute('href');
+            backLink.addEventListener('click', (evt) => {
+                evt.preventDefault();
+                backToTasks();
+            });
+        }
+
+        const reviewLink = main.querySelector(`a[href="/tarea/${taskId}/revision"]`);
+        if (reviewLink) {
+            reviewLink.removeAttribute('href');
+            reviewLink.addEventListener('click', (evt) => {
+                evt.preventDefault();
+                openTaskReview(taskId);
+            });
+        }
+    });
+}
+
+function openTaskReview(taskId, event) {
+    if (event) event.preventDefault();
+    window.currentTaskId = taskId;
+    showTaskView('review');
+
+    loadSectionHtml(`/tarea/${taskId}/revision`, 'taskReviewSection', (main) => {
+        const backLink = main.querySelector(`nav a[href="/tarea/${taskId}"]`);
+        if (backLink) {
+            backLink.removeAttribute('href');
+            backLink.addEventListener('click', (evt) => {
+                evt.preventDefault();
+                backToTaskDetail();
+            });
+        }
+    });
+}
+
+function backToTasks() {
+    showTaskView('overview');
+}
+
+function backToTaskDetail() {
+    if (window.currentTaskId) {
+        openTaskDetail(window.currentTaskId);
+    } else {
+        backToTasks();
+    }
 }
 
 function removeStudent(classId, studentId, studentName) {

@@ -34,8 +34,12 @@ function switchSection(section) {
         console.log('  section', name, 'element', el, 'before classes', el ? Array.from(el.classList) : null);
         if (el) {
             if (name === section) {
+                el.style.display = 'block';
+                el.style.visibility = 'visible';
                 el.classList.remove('d-none');
             } else {
+                el.style.display = 'none';
+                el.style.visibility = 'hidden';
                 el.classList.add('d-none');
             }
             console.log('  section', name, 'after classes', Array.from(el.classList));

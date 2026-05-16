@@ -196,7 +196,6 @@ textarea:focus {
   color: var(--primary) !important;
 }
 
-/* Fix for section visibility - ensure sections display correctly */
 #sectionTasks,
 #sectionPersonas,
 #sectionRendimiento {

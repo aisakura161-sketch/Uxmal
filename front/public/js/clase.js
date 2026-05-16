@@ -30,12 +30,21 @@ function switchSection(section) {
         const el = document.getElementById(`section${name.charAt(0).toUpperCase() + name.slice(1)}`);
         if (el) {
             if (name === section) {
-                // Show section with inline style to override Bootstrap
                 el.style.display = 'block';
+                el.style.visibility = 'visible';
+                el.style.overflow = 'visible';
+                el.style.height = 'auto';
                 el.classList.remove('d-none');
+                const row = el.querySelector('.row');
+                if (row) {
+                    row.style.display = 'flex';
+                    row.style.visibility = 'visible';
+                    row.style.overflow = 'visible';
+                    row.style.height = 'auto';
+                }
             } else {
-                // Hide section
                 el.style.display = 'none';
+                el.style.visibility = 'hidden';
                 el.classList.add('d-none');
             }
         }

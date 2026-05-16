@@ -50,6 +50,10 @@ function switchSection(section) {
             if (row) {
                 const rowStyle = window.getComputedStyle(row);
                 console.log('    row', row, 'computed', rowStyle.display, rowStyle.visibility, rowStyle.height, rowStyle.overflow, 'rect', row.getBoundingClientRect());
+                Array.from(row.children).forEach((child, index) => {
+                    const style = window.getComputedStyle(child);
+                    console.log('      row child', index, child.tagName, child.className, 'computed', style.display, style.visibility, style.height, style.overflow, 'rect', child.getBoundingClientRect());
+                });
             }
         }
     });

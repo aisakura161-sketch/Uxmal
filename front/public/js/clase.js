@@ -74,9 +74,8 @@ async function loadSectionHtml(url, sectionId, adjustDom) {
 
     container.innerHTML = `
         <div class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="mt-3 text-muted">Cargando...</div>
         </div>
     `;
 
@@ -90,7 +89,8 @@ async function loadSectionHtml(url, sectionId, adjustDom) {
         const main = doc.querySelector('main');
         if (!main) throw new Error('Contenido no disponible');
 
-        if (adjustDom) adjustDom(main, sectionId);
+        const temp = document.createElement('div');
+        temp.innerHTML = main.innerHTML;
 
         const topActions = sectionId === 'taskReviewSection'
             ? `
@@ -105,7 +105,9 @@ async function loadSectionHtml(url, sectionId, adjustDom) {
                 </div>
               `;
 
-        container.innerHTML = `${topActions}${main.innerHTML}`;
+        container.innerHTML = `${topActions}${temp.innerHTML}`;
+
+        if (adjustDom) adjustDom(container, sectionId);
     } catch (error) {
         container.innerHTML = `
             <div class="alert alert-danger">No se pudo cargar el contenido. Intenta de nuevo.</div>
@@ -118,8 +120,8 @@ function openTaskDetail(taskId, event) {
     window.currentTaskId = taskId;
     showTaskView('detail');
 
-    loadSectionHtml(`/tarea/${taskId}`, 'taskDetailSection', (main) => {
-        const backLink = main.querySelector('nav a[href*="/clase/"]');
+    loadSectionHtml(`/tarea/${taskId}`, 'taskDetailSection', (container) => {
+        const backLink = container.querySelector('nav a[href*="/clase/"]');
         if (backLink) {
             backLink.removeAttribute('href');
             backLink.addEventListener('click', (evt) => {
@@ -128,7 +130,7 @@ function openTaskDetail(taskId, event) {
             });
         }
 
-        const reviewLink = main.querySelector(`a[href="/tarea/${taskId}/revision"]`);
+        const reviewLink = container.querySelector(`a[href="/tarea/${taskId}/revision"]`);
         if (reviewLink) {
             reviewLink.removeAttribute('href');
             reviewLink.addEventListener('click', (evt) => {
@@ -144,8 +146,8 @@ function openTaskReview(taskId, event) {
     window.currentTaskId = taskId;
     showTaskView('review');
 
-    loadSectionHtml(`/tarea/${taskId}/revision`, 'taskReviewSection', (main) => {
-        const backLink = main.querySelector(`nav a[href="/tarea/${taskId}"]`);
+    loadSectionHtml(`/tarea/${taskId}/revision`, 'taskReviewSection', (container) => {
+        const backLink = container.querySelector(`nav a[href="/tarea/${taskId}"]`);
         if (backLink) {
             backLink.removeAttribute('href');
             backLink.addEventListener('click', (evt) => {

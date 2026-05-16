@@ -26,14 +26,9 @@ async function createPost(claseId) {
 
 function switchSection(section) {
     const sections = ['tasks', 'personas', 'rendimiento'];
-    console.log('[switchSection] requested:', section);
     sections.forEach(name => {
-        const id = `section${name.charAt(0).toUpperCase() + name.slice(1)}`;
-        const el = document.getElementById(id);
-        if (!el) {
-            console.warn(`[switchSection] element not found: ${id}`);
-        } else {
-            console.log(`[switchSection] toggling ${id} -> hide=${name !== section}`);
+        const el = document.getElementById(`section${name.charAt(0).toUpperCase() + name.slice(1)}`);
+        if (el) {
             el.classList.toggle('d-none', name !== section);
         }
     });

@@ -196,3 +196,17 @@ textarea:focus {
   color: var(--primary) !important;
 }
 
+/* Fix for section visibility - ensure sections display correctly */
+#sectionTasks,
+#sectionPersonas,
+#sectionRendimiento {
+  display: block;
+  width: 100%;
+}
+
+#sectionTasks.d-none,
+#sectionPersonas.d-none,
+#sectionRendimiento.d-none {
+  display: none !important;
+}
+

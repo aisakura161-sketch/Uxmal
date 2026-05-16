@@ -29,7 +29,15 @@ function switchSection(section) {
     sections.forEach(name => {
         const el = document.getElementById(`section${name.charAt(0).toUpperCase() + name.slice(1)}`);
         if (el) {
-            el.classList.toggle('d-none', name !== section);
+            if (name === section) {
+                // Show section with inline style to override Bootstrap
+                el.style.display = 'block';
+                el.classList.remove('d-none');
+            } else {
+                // Hide section
+                el.style.display = 'none';
+                el.classList.add('d-none');
+            }
         }
     });
 

@@ -26,25 +26,13 @@ async function createPost(claseId) {
 
 function switchSection(section) {
     const sections = ['tasks', 'personas', 'rendimiento'];
+    
     sections.forEach(name => {
         const el = document.getElementById(`section${name.charAt(0).toUpperCase() + name.slice(1)}`);
         if (el) {
             if (name === section) {
-                el.style.display = 'block';
-                el.style.visibility = 'visible';
-                el.style.overflow = 'visible';
-                el.style.height = 'auto';
                 el.classList.remove('d-none');
-                const row = el.querySelector('.row');
-                if (row) {
-                    row.style.display = 'flex';
-                    row.style.visibility = 'visible';
-                    row.style.overflow = 'visible';
-                    row.style.height = 'auto';
-                }
             } else {
-                el.style.display = 'none';
-                el.style.visibility = 'hidden';
                 el.classList.add('d-none');
             }
         }

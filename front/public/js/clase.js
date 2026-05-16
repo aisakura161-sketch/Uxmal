@@ -52,7 +52,12 @@ function switchSection(section) {
                 console.log('    row', row, 'computed', rowStyle.display, rowStyle.visibility, rowStyle.height, rowStyle.overflow, 'rect', row.getBoundingClientRect());
                 Array.from(row.children).forEach((child, index) => {
                     const style = window.getComputedStyle(child);
-                    console.log('      row child', index, child.tagName, child.className, 'computed', style.display, style.visibility, style.height, style.overflow, 'rect', child.getBoundingClientRect());
+                    console.log('      row child', index, child.tagName, child.className, 'computed', style.display, style.visibility, style.position, style.height, style.overflow, 'rect', child.getBoundingClientRect());
+                    const card = child.querySelector('.card');
+                    if (card) {
+                        const cardStyle = window.getComputedStyle(card);
+                        console.log('        card', card.tagName, card.className, 'computed', cardStyle.display, cardStyle.visibility, cardStyle.position, cardStyle.height, 'rect', card.getBoundingClientRect());
+                    }
                 });
             }
         }

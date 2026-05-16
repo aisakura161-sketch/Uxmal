@@ -25,16 +25,20 @@ async function createPost(claseId) {
 }
 
 function switchSection(section) {
+    console.log('switchSection called with', section);
     const sections = ['tasks', 'personas', 'rendimiento'];
     
     sections.forEach(name => {
-        const el = document.getElementById(`section${name.charAt(0).toUpperCase() + name.slice(1)}`);
+        const id = `section${name.charAt(0).toUpperCase() + name.slice(1)}`;
+        const el = document.getElementById(id);
+        console.log('  section', name, 'element', el, 'before classes', el ? Array.from(el.classList) : null);
         if (el) {
             if (name === section) {
                 el.classList.remove('d-none');
             } else {
                 el.classList.add('d-none');
             }
+            console.log('  section', name, 'after classes', Array.from(el.classList));
         }
     });
 

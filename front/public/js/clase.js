@@ -36,13 +36,21 @@ function switchSection(section) {
             if (name === section) {
                 el.style.display = 'block';
                 el.style.visibility = 'visible';
+                el.style.height = 'auto';
+                el.style.overflow = 'visible';
                 el.classList.remove('d-none');
             } else {
                 el.style.display = 'none';
                 el.style.visibility = 'hidden';
                 el.classList.add('d-none');
             }
-            console.log('  section', name, 'after classes', Array.from(el.classList));
+            const computed = window.getComputedStyle(el);
+            console.log('  section', name, 'after classes', Array.from(el.classList), 'style', el.style.cssText, 'computed', computed.display, computed.visibility, computed.height, computed.overflow, 'rect', el.getBoundingClientRect());
+            const row = el.querySelector('.row');
+            if (row) {
+                const rowStyle = window.getComputedStyle(row);
+                console.log('    row', row, 'computed', rowStyle.display, rowStyle.visibility, rowStyle.height, rowStyle.overflow, 'rect', row.getBoundingClientRect());
+            }
         }
     });
 

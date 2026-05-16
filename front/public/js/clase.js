@@ -25,40 +25,15 @@ async function createPost(claseId) {
 }
 
 function switchSection(section) {
-    console.log('switchSection called with', section);
     const sections = ['tasks', 'personas', 'rendimiento'];
-    
+
     sections.forEach(name => {
-        const id = `section${name.charAt(0).toUpperCase() + name.slice(1)}`;
-        const el = document.getElementById(id);
-        console.log('  section', name, 'element', el, 'before classes', el ? Array.from(el.classList) : null);
+        const el = document.getElementById(`section${name.charAt(0).toUpperCase() + name.slice(1)}`);
         if (el) {
             if (name === section) {
-                el.style.display = 'block';
-                el.style.visibility = 'visible';
-                el.style.height = 'auto';
-                el.style.overflow = 'visible';
                 el.classList.remove('d-none');
             } else {
-                el.style.display = 'none';
-                el.style.visibility = 'hidden';
                 el.classList.add('d-none');
-            }
-            const computed = window.getComputedStyle(el);
-            console.log('  section', name, 'after classes', Array.from(el.classList), 'style', el.style.cssText, 'computed', computed.display, computed.visibility, computed.height, computed.overflow, 'rect', el.getBoundingClientRect());
-            const row = el.querySelector('.row');
-            if (row) {
-                const rowStyle = window.getComputedStyle(row);
-                console.log('    row', row, 'computed', rowStyle.display, rowStyle.visibility, rowStyle.height, rowStyle.overflow, 'rect', row.getBoundingClientRect());
-                Array.from(row.children).forEach((child, index) => {
-                    const style = window.getComputedStyle(child);
-                    console.log('      row child', index, child.tagName, child.className, 'computed', style.display, style.visibility, style.position, style.height, style.overflow, 'rect', child.getBoundingClientRect());
-                    const card = child.querySelector('.card');
-                    if (card) {
-                        const cardStyle = window.getComputedStyle(card);
-                        console.log('        card', card.tagName, card.className, 'computed', cardStyle.display, cardStyle.visibility, cardStyle.position, cardStyle.height, 'rect', card.getBoundingClientRect());
-                    }
-                });
             }
         }
     });

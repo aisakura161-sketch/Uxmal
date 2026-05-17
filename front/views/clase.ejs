@@ -317,11 +317,11 @@
                             <% if (!announcementPostsPersonas || announcementPostsPersonas.length === 0) { %>
                                 <div class="text-muted">No hay anuncios recientes.</div>
                             <% } else { %>
-                                <div class="list-group list-group-flush">
-                                    <% announcementPostsPersonas.forEach(post => { %>
-                                        <div class="list-group-item border-0 px-0 py-3">
+                                <% announcementPostsPersonas.forEach(post => { %>
+                                    <div class="card border border-1 rounded-4 mb-3">
+                                        <div class="card-body py-3 px-3">
                                             <div class="d-flex align-items-start gap-3 mb-2">
-                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; font-size: 1.1rem;">
                                                     <i class="fa-solid fa-bullhorn"></i>
                                                 </div>
                                                 <div>
@@ -332,8 +332,8 @@
                                             <div class="mb-1 fw-semibold"><%= post.titulo || 'Anuncio' %></div>
                                             <p class="small text-muted mb-0"><%= post.descripcion || post.contenido || '' %></p>
                                         </div>
-                                    <% }) %>
-                                </div>
+                                    </div>
+                                <% }) %>
                             <% } %>
                         </div>
                     </div>

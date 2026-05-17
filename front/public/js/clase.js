@@ -155,6 +155,20 @@ function openTaskReview(taskId, event) {
                 backToTaskDetail();
             });
         }
+
+        const studentButtons = container.querySelectorAll('button.list-group-item-action');
+        studentButtons.forEach(btn => {
+            const onclickAttr = btn.getAttribute('onclick') || '';
+            const jsonMatch = onclickAttr.match(/verDetalleEntrega\('(.+)'\)/);
+            if (jsonMatch && jsonMatch[1]) {
+                const alumnoData = jsonMatch[1];
+                btn.removeAttribute('onclick');
+                btn.addEventListener('click', function(evt) {
+                    evt.preventDefault();
+                    verDetalleEntrega(alumnoData);
+                });
+            }
+        });
     });
 }
 

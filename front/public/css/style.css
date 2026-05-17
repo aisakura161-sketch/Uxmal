@@ -209,7 +209,6 @@ textarea:focus {
 #sectionPersonas *,
 #sectionRendimiento * {
   position: static !important;
-  height: auto !important;
   min-height: 0 !important;
 }
 
